@@ -1,0 +1,55 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    var addr = '1MwpnZhofThTc4nRd9Jte2BmQqfyDfzJDo';
+    $("#address").text('Here is this Wallet Address: ' + addr);
+    
+    $.ajax({
+      url: 'https://api.chain.com/v1/bitcoin/addresses/' + addr,
+      type: 'GET',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader ('Authorization', 'Basic '+btoa('05e17b4bd6bf6ecd3df2947c027ce523'));
+      },
+      success: function(data) {
+        var BTCBalance = data.balance / 100000000.0;
+        var BTCSent = data.sent / 100000000.0;
+        var BTCReceived = data.received / 100000000.0;
+         // convert satoshis to BTC
+        $('#balance').append('This wallet contains: ' + BTCBalance + ' BTC');
+        $('#sent').append('This wallet has sent: ' + BTCSent + ' BTC');
+        $('#received').append('This wallet has received: ' + BTCReceived + ' BTC');
+      },
+      error: function(req, msg, err) {
+        console.log(err);
+      }
+    });
+  });
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#search').click(function() { // When the search button is pushed
+      var addr = $('input[name=WalletAddress]').val(); // The address that is typed in should be assigned to the variable "addr"
+      $.ajax({
+        url: 'https://api.chain.com/v1/bitcoin/addresses/' + addr,
+        type: 'GET',
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader ('Authorization', 'Basic '+btoa('05e17b4bd6bf6ecd3df2947c027ce523'));
+        },
+        success: function(data) {
+          var BTCBalance = data.balance / 100000000.0;
+          var BTCSent = data.sent / 100000000.0;
+          var BTCReceived = data.received / 100000000.0;
+
+          $('#address').text("Here is the Wallet Address: " + addr);
+          $('#results').empty();
+          $('#results').append(BTCBalance + " BTC");
+          $('#results').append(BTCSent + " BTC");
+          $('#results').append(BTCReceived + " BTC");
+        },
+        error: function(req, msg, err) {
+          console.log(err);
+        }
+      });
+    });
+  });
+</script>

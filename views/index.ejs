@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://chriszarate.github.io/sheetrock/dist/sheetrock.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      p {
+        padding-left:9.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <h4>Zantler Press Clippings</h4>
+    <dl id="hr">
+      <script id="hr-template" type="text/x-handlebars-template">
+      <dd>{{cells.Date}} <strong> <a href="{{cells.URL}}", target="_blank">{{cells.Title}}</a></strong><br />
+      <p>{{cells.Outlet}}</p></dd><br />
+      </script>
+    <script>
+    $(document).ready(function() {
+      // Define spreadsheet URL.
+      var zantlerSpreadsheet = 'https://docs.google.com/a/zantler.com/spreadsheets/d/1t4IpQ1lYnXOiC0VgCPWh1qktdhp5xBKejW0NSoVshJs/edit#gid=0';
+
+      // Compile the Handlebars template.
+      var HRTemplate = Handlebars.compile($('#hr-template').html());
+
+      // Load the latest news clippings.
+      $('#hr').sheetrock({
+        url: zantlerSpreadsheet,
+        query: "select A,B,C,E, F order by F desc",
+        fetchSize: 50,
+        rowTemplate: HRTemplate
+      });
+    });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.2/handlebars.min.js"></script>  
+  </body>
+</html>
